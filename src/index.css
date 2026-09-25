@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#F6FAFD] text-[#16324F] font-sans antialiased selection:bg-[#0B65D8] selection:text-white;
+  }
+}
+
+/* Polar Backgrounds & Mountain Silhouettes */
+.polar-login-bg {
+  background: linear-gradient(180deg, #60A5FA 0%, #93C5FD 20%, #DBEAFE 45%, #EFF6FF 70%, #E2E8F0 100%);
+}
+
+.polar-grid-pattern {
+  background-image: radial-gradient(rgba(11, 101, 216, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.polar-grid-pattern-dark {
+  background-image: radial-gradient(rgba(56, 189, 248, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.polar-map-bg {
+  background: radial-gradient(circle at 50% 50%, #E6F4FF 0%, #D8ECFC 60%, #CDE4FA 100%);
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
