@@ -13,12 +13,12 @@ import {
   CheckCircle2, 
   Eye, 
   EyeOff,
-  Navigation,
   Shield
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import type { UserRole } from '../types';
 import { DEMO_USERS } from '../data/demoData';
+import { ExpediXLogo } from '../components/common/ExpediXLogo';
 
 const capabilities = [
   { name: 'Expedition Planning', icon: Compass },
@@ -58,13 +58,13 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="relative min-h-screen w-full flex items-center justify-between overflow-x-hidden font-sans select-none">
       
-      {/* 1. FULL-SCREEN REALISTIC POLAR RESEARCH STATION BACKGROUND PHOTOGRAPH */}
+      {/* 1. FULL-SCREEN REAL BHARATI ANTARCTIC RESEARCH STATION PHOTOGRAPH */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/antarctic-station.jpg')" }}
+        style={{ backgroundImage: "url('/bharati-station.jpg')" }}
       >
         {/* Subtle Dark Navy Overlay on Left side only so white text remains crisp & readable */}
-        <div className="absolute inset-y-0 left-0 w-full lg:w-[60%] bg-gradient-to-r from-[#041A35]/85 via-[#082D56]/50 to-transparent pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-full lg:w-[58%] bg-gradient-to-r from-[#041A35]/90 via-[#082D56]/55 to-transparent pointer-events-none" />
       </div>
 
       {/* 2. MAIN VIEWPORT CONTAINER */}
@@ -77,27 +77,17 @@ export const LoginPage: React.FC = () => {
           <div className="space-y-5">
             
             {/* Logo & Product Identity */}
-            <div className="flex items-center gap-3.5">
-              {/* ExpediX Circular Polar Logo */}
-              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-gradient-to-tr from-[#0B65D8] via-[#38BDF8] to-[#E6F4FF] p-0.5 shadow-2xl flex items-center justify-center shrink-0">
-                <div className="w-full h-full bg-[#082D56] rounded-full flex items-center justify-center relative overflow-hidden">
-                  <Navigation className="w-7 h-7 text-[#38BDF8] transform -rotate-45 drop-shadow-md" />
-                  <div className="absolute bottom-0 inset-x-0 h-1 bg-[#38BDF8]/60" />
-                </div>
-              </div>
-
-              <div>
-                <h1 className="font-heading font-extrabold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-white drop-shadow-md flex items-center gap-2">
-                  <span>EXPEDIX</span>
-                  <span className="text-[10px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-sky-400/20 text-sky-200 border border-sky-300/30">
-                    PROTOTYPE
-                  </span>
-                </h1>
-                <p className="text-xs sm:text-sm text-sky-100 font-medium tracking-wide drop-shadow mt-0.5">
-                  Integrated Polar Expedition Logistics &amp; Knowledge Platform
-                </p>
-              </div>
+            <div className="flex items-center gap-4">
+              <ExpediXLogo
+                variant="horizontal"
+                theme="dark"
+                size="lg"
+                badge="PROTOTYPE"
+              />
             </div>
+            <p className="text-xs sm:text-sm text-sky-100 font-medium tracking-wide drop-shadow -mt-2">
+              Integrated Polar Expedition Logistics &amp; Knowledge Platform
+            </p>
 
             {/* Lifecycle Navigation Ribbon */}
             <div className="pt-2">

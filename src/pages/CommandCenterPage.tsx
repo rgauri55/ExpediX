@@ -1,9 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { 
-  Users, 
-  Boxes, 
-  Package, 
-  Layers, 
   AlertTriangle, 
   Clock, 
   Radio, 
@@ -13,242 +10,439 @@ import {
   Mountain
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { ExpediXLogo } from '../components/common/ExpediXLogo';
 import { 
-  DASHBOARD_METRICS, 
   OPERATIONAL_ALERTS, 
   RECENT_FIELD_ACTIVITIES, 
   UPCOMING_EXPEDITIONS 
 } from '../data/demoData';
-import { Badge } from '../components/common/Badge';
 
 export const CommandCenterPage: React.FC = () => {
   const { currentExpedition } = useAuth();
 
   return (
-    <div className="space-y-4 font-sans">
+    <div className="space-y-3.5 font-sans max-w-[1600px] mx-auto text-slate-800">
       
-      {/* 1. TOP GREETING & OPERATIONS HEADER */}
-      <div className="bg-white rounded-2xl border border-polar-border p-5 sm:p-6 shadow-subtle relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Subtle decorative polar mountain pattern on right */}
-        <div className="absolute right-0 inset-y-0 w-80 bg-gradient-to-l from-polar-blue-light/40 to-transparent pointer-events-none hidden md:block" />
+      {/* ========================================================================= */}
+      {/* 1. COMPACT HERO / WELCOME BANNER                                          */}
+      {/* ========================================================================= */}
+      <div className="bg-white rounded-2xl border border-polar-border shadow-subtle overflow-hidden relative min-h-[105px] flex items-center justify-between p-5">
         
-        <div className="relative z-10">
-          <h1 className="font-heading text-xl sm:text-2xl font-bold text-navy-DEFAULT tracking-tight">
+        {/* Right Background Image: Bharati Station Photo blending into the canvas */}
+        <div 
+          className="absolute inset-y-0 right-0 w-full md:w-[60%] lg:w-[50%] bg-cover bg-center bg-no-repeat pointer-events-none"
+          style={{ backgroundImage: "url('/bharati-station.jpg')" }}
+        >
+          {/* Smooth Left Gradient Blend */}
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/85 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-white/30 to-transparent" />
+        </div>
+
+        {/* Left Welcome Content */}
+        <div className="relative z-10 max-w-xl">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-950 border border-amber-500/40">
+              DEMO ENVIRONMENT • SIMULATION DATA
+            </span>
+          </div>
+          <h1 className="font-heading text-2xl sm:text-[28px] lg:text-[30px] font-bold text-[#082D56] tracking-tight">
             Good morning, Command Center
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
-            Polar Expedition Operations Overview
-          </p>
-          <div className="flex items-center gap-3 mt-2 text-xs text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-2 mt-1 text-sm sm:text-[14.5px] text-slate-700 font-medium">
+            <span>Polar Expedition Operations Overview</span>
+            <span className="text-slate-300">|</span>
+            <div className="flex items-center gap-1.5 font-mono text-xs sm:text-[13px] text-slate-700">
               <Clock className="w-3.5 h-3.5 text-polar-blue" />
               <span>Last synchronized: 09:42 UTC</span>
+              <span className="text-slate-300">•</span>
+              <span className="text-slate-900 font-semibold">Bharati Station — Antarctica</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 2. LIVE EXPEDITION PROGRESS (DIRECTLY BELOW HERO)                         */}
+      {/* ========================================================================= */}
+      <div className="bg-white rounded-xl border border-polar-border p-3.5 shadow-subtle">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5 pb-2 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <h2 className="text-sm sm:text-base font-bold uppercase tracking-wider text-[#082D56]">
+              Live Expedition Progress
+            </h2>
+            <span className="text-xs sm:text-[13px] font-mono text-slate-800 bg-slate-100 px-2.5 py-0.5 rounded font-bold border border-slate-200">
+              {currentExpedition.code} • {currentExpedition.stationName}
             </span>
-            <span>|</span>
-            <span>Bharati Station — New Delhi (IST: 15:12)</span>
+          </div>
+          <div className="text-xs sm:text-[13px] text-slate-700 font-medium flex items-center gap-2">
+            <span>Current Phase: <strong className="text-polar-blue font-bold">Field Deployment &amp; Ops</strong></span>
+            <span className="text-slate-300">|</span>
+            <span>Est. Return: <strong className="text-slate-900 font-mono">15 Mar 2026</strong></span>
           </div>
         </div>
 
-        {/* Live Mission Badge */}
-        <div className="relative z-10 flex items-center gap-2 self-start md:self-auto">
-          <Badge variant="warning" dot size="sm">
-            Demo Environment • Simulation Data
-          </Badge>
-        </div>
-      </div>
-
-      {/* 2. TOP KPI CARDS (6 METRICS ROW) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
-        
-        {/* Card 1: Active Expeditions */}
-        <div className="bg-white p-3.5 rounded-xl border border-polar-border shadow-subtle hover:border-blue-300 transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-slate-500">Active Expeditions</span>
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-polar-blue flex items-center justify-center">
-              <Mountain className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="text-2xl font-heading font-bold text-navy-DEFAULT">
-            {DASHBOARD_METRICS.activeExpeditions.count}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 mt-1">
-            <span>↑</span>
-            <span>{DASHBOARD_METRICS.activeExpeditions.trend}</span>
-          </div>
-        </div>
-
-        {/* Card 2: Personnel Deployed */}
-        <div className="bg-white p-3.5 rounded-xl border border-polar-border shadow-subtle hover:border-blue-300 transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-slate-500">Personnel Deployed</span>
-            <div className="w-7 h-7 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
-              <Users className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="text-2xl font-heading font-bold text-navy-DEFAULT">
-            {DASHBOARD_METRICS.personnelDeployed.count}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 mt-1">
-            <span>▲</span>
-            <span>{DASHBOARD_METRICS.personnelDeployed.trend}</span>
-          </div>
-        </div>
-
-        {/* Card 3: Cargo Tracked */}
-        <div className="bg-white p-3.5 rounded-xl border border-polar-border shadow-subtle hover:border-blue-300 transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-slate-500">Cargo Tracked</span>
-            <div className="w-7 h-7 rounded-lg bg-blue-50 text-polar-blue flex items-center justify-center">
-              <Boxes className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="text-2xl font-heading font-bold text-navy-DEFAULT">
-            {DASHBOARD_METRICS.cargoTracked.count}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-medium text-emerald-600 mt-1">
-            <span>▲</span>
-            <span>{DASHBOARD_METRICS.cargoTracked.trend}</span>
-          </div>
-        </div>
-
-        {/* Card 4: Assets Active */}
-        <div className="bg-white p-3.5 rounded-xl border border-polar-border shadow-subtle hover:border-blue-300 transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-slate-500">Assets Active</span>
-            <div className="w-7 h-7 rounded-lg bg-cyan-50 text-cyan-700 flex items-center justify-center">
-              <Layers className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="text-2xl font-heading font-bold text-navy-DEFAULT">
-            {DASHBOARD_METRICS.activeAssets.count}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-medium text-amber-600 mt-1">
-            <span>▲</span>
-            <span>{DASHBOARD_METRICS.activeAssets.trend}</span>
-          </div>
-        </div>
-
-        {/* Card 5: Inventory Categories */}
-        <div className="bg-white p-3.5 rounded-xl border border-polar-border shadow-subtle hover:border-blue-300 transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-slate-500">Inventory Categories</span>
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
-              <Package className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="text-2xl font-heading font-bold text-navy-DEFAULT">
-            {DASHBOARD_METRICS.inventoryCategories.count}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-medium text-amber-600 mt-1">
-            <span>▲</span>
-            <span>{DASHBOARD_METRICS.inventoryCategories.trend}</span>
-          </div>
-        </div>
-
-        {/* Card 6: Active Alerts */}
-        <div className="bg-white p-3.5 rounded-xl border border-rose-200/80 shadow-subtle hover:border-rose-300 transition-all">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-semibold text-rose-700">Active Alerts</span>
-            <div className="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center">
-              <AlertTriangle className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="text-2xl font-heading font-bold text-rose-600">
-            {DASHBOARD_METRICS.activeAlerts.count}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] font-medium text-rose-600 mt-1">
-            <span>▲</span>
-            <span>{DASHBOARD_METRICS.activeAlerts.trend}</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* 3. MAIN OPERATIONAL 3-COLUMN GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        
-        {/* LEFT COLUMN: Active & Upcoming Expeditions (4 cols) */}
-        <div className="lg:col-span-4 space-y-4">
+        {/* Compact 5-Stage Stepper with Strong Readability */}
+        <div className="grid grid-cols-5 gap-2 text-center">
           
-          {/* Active Expedition Card */}
-          <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
+          {/* Step 1: Planning */}
+          <div className="flex flex-col items-center">
+            <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px] font-bold mb-1 shadow-xs">
+              ✓
+            </div>
+            <span className="text-xs sm:text-[13.5px] font-bold text-slate-900">Planning</span>
+            <span className="text-[12px] sm:text-[12.5px] text-emerald-800 font-semibold">Completed</span>
+            <span className="text-[11.5px] sm:text-xs text-slate-600 font-mono font-medium">12 Aug</span>
+          </div>
+
+          {/* Step 2: Logistics */}
+          <div className="flex flex-col items-center">
+            <div className="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[11px] font-bold mb-1 shadow-xs">
+              ✓
+            </div>
+            <span className="text-xs sm:text-[13.5px] font-bold text-slate-900">Logistics</span>
+            <span className="text-[12px] sm:text-[12.5px] text-emerald-800 font-semibold">Completed</span>
+            <span className="text-[11.5px] sm:text-xs text-slate-600 font-mono font-medium">16 Aug</span>
+          </div>
+
+          {/* Step 3: Deployment */}
+          <div className="flex flex-col items-center">
+            <div className="w-6 h-6 rounded-full bg-polar-blue text-white flex items-center justify-center text-[11px] font-bold mb-1 shadow-xs ring-2 ring-blue-100">
+              ✓
+            </div>
+            <span className="text-xs sm:text-[13.5px] font-bold text-[#082D56]">Deployment</span>
+            <span className="text-[12px] sm:text-[12.5px] text-polar-blue font-bold">In Progress</span>
+            <span className="text-[11.5px] sm:text-xs text-slate-600 font-mono font-medium">20 Aug</span>
+          </div>
+
+          {/* Step 4: Field Ops */}
+          <div className="flex flex-col items-center">
+            <div className="w-6 h-6 rounded-full bg-blue-50 border-2 border-polar-blue text-polar-blue flex items-center justify-center text-[11px] font-bold mb-1">
+              4
+            </div>
+            <span className="text-xs sm:text-[13.5px] font-bold text-slate-900">Field Ops</span>
+            <span className="text-[12px] sm:text-[12.5px] text-polar-blue font-semibold">Active Buffer</span>
+            <span className="text-[11.5px] sm:text-xs text-slate-600 font-mono font-medium">Underway</span>
+          </div>
+
+          {/* Step 5: Completion */}
+          <div className="flex flex-col items-center opacity-75">
+            <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-300 text-slate-600 flex items-center justify-center text-[11px] font-bold mb-1">
+              5
+            </div>
+            <span className="text-xs sm:text-[13.5px] font-semibold text-slate-800">Completion</span>
+            <span className="text-[12px] sm:text-[12.5px] text-slate-600 font-medium">Upcoming</span>
+            <span className="text-[11.5px] sm:text-xs text-slate-500 font-mono">Stage 7</span>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 3. MAIN OPERATIONAL GRID (BALANCED 3 COLUMNS)                             */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5 items-start">
+        
+        {/* ================= LEFT COLUMN: ACTIVE EXPEDITION ================= */}
+        <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col">
+          <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
+            <div className="flex items-center gap-1.5">
+              <Mountain className="w-4 h-4 text-polar-blue" />
+              <h2 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#082D56]">
                 Active Expedition
-              </h3>
-              <span className="text-[11px] text-polar-blue font-semibold hover:underline cursor-pointer">
-                View All →
+              </h2>
+            </div>
+            <Link to="/expeditions" className="text-xs sm:text-[13px] text-polar-blue font-semibold hover:underline flex items-center gap-1">
+              <span>View Details</span>
+              <span className="text-[11px]">→</span>
+            </Link>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-slate-50/90 border border-slate-200/70">
+            <div className="flex items-start justify-between gap-2 mb-1.5">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs sm:text-[13.5px] font-bold text-[#082D56] font-mono">
+                    {currentExpedition.code}
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-300 text-[11px] font-bold uppercase">
+                    ACTIVE
+                  </span>
+                </div>
+                <h3 className="text-[15px] sm:text-base font-bold text-slate-900 mt-1 leading-snug">
+                  {currentExpedition.name}
+                </h3>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-1.5 text-xs sm:text-[13.5px] text-slate-700 font-medium my-2">
+              <MapPin className="w-3.5 h-3.5 text-polar-blue shrink-0" />
+              <span>{currentExpedition.location}</span>
+            </div>
+
+            {/* Mission Progress Bar */}
+            <div className="space-y-1.5 my-2.5 bg-white p-2.5 rounded-lg border border-slate-200/70">
+              <div className="flex items-center justify-between text-xs sm:text-[13px]">
+                <span className="text-slate-700 font-semibold">Mission Progress</span>
+                <span className="font-bold text-[#082D56] font-mono text-xs sm:text-[14px]">82%</span>
+              </div>
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                <div className="h-full bg-polar-blue rounded-full w-[82%] transition-all" />
+              </div>
+            </div>
+
+            {/* 4 Resource Stat Pills with Enhanced Readability */}
+            <div className="grid grid-cols-4 gap-1.5 pt-1 text-center">
+              <div className="p-1.5 rounded-lg bg-white border border-slate-200/70 shadow-2xs">
+                <span className="text-[12px] sm:text-[12.5px] font-semibold text-slate-700 uppercase tracking-wider block">Personnel</span>
+                <span className="text-sm sm:text-[15px] font-bold text-[#082D56] font-mono mt-0.5 block">{currentExpedition.personnelCount}</span>
+              </div>
+              <div className="p-1.5 rounded-lg bg-white border border-slate-200/70 shadow-2xs">
+                <span className="text-[12px] sm:text-[12.5px] font-semibold text-slate-700 uppercase tracking-wider block">Cargo</span>
+                <span className="text-sm sm:text-[15px] font-bold text-[#082D56] font-mono mt-0.5 block">{currentExpedition.cargoCount}</span>
+              </div>
+              <div className="p-1.5 rounded-lg bg-white border border-slate-200/70 shadow-2xs">
+                <span className="text-[12px] sm:text-[12.5px] font-semibold text-slate-700 uppercase tracking-wider block">Assets</span>
+                <span className="text-sm sm:text-[15px] font-bold text-[#082D56] font-mono mt-0.5 block">{currentExpedition.assetCount}</span>
+              </div>
+              <div className="p-1.5 rounded-lg bg-white border border-slate-200/70 shadow-2xs">
+                <span className="text-[12px] sm:text-[12.5px] font-semibold text-slate-700 uppercase tracking-wider block">Inventory</span>
+                <span className="text-sm sm:text-[15px] font-bold text-[#082D56] font-mono mt-0.5 block">12</span>
+              </div>
+            </div>
+
+            {/* Operational Mission Context Notes */}
+            <div className="mt-2.5 pt-2 border-t border-slate-200/70 flex items-center justify-between text-xs sm:text-[12.5px] text-slate-700 font-medium">
+              <span>Lead: <strong className="text-slate-900 font-bold">Dr. Rajesh Nair</strong></span>
+              <span className="font-mono text-slate-600 font-semibold">Traverse Day 18</span>
+            </div>
+
+          </div>
+        </div>
+
+        {/* ================= CENTER COLUMN: EXPEDITION OVERVIEW MAP ================= */}
+        <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col">
+          <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-100">
+            <div>
+              <div className="flex items-center gap-1.5">
+                <Compass className="w-4 h-4 text-polar-blue" />
+                <h2 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#082D56]">
+                  Expedition Overview Map
+                </h2>
+              </div>
+              <span className="text-xs sm:text-[12.5px] text-slate-600 font-mono font-medium">
+                Schematic operational view • Simulated location data
               </span>
             </div>
+            <Link to="/expeditions" className="text-xs sm:text-[13px] text-polar-blue font-semibold hover:underline flex items-center gap-1 shrink-0">
+              <span>View Details</span>
+              <span className="text-[11px]">→</span>
+            </Link>
+          </div>
 
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/70">
-              <div className="flex items-start justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-polar-blue text-white flex items-center justify-center font-bold text-xs">
-                    <Mountain className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-navy-DEFAULT">
-                      {currentExpedition.code}
-                    </h4>
-                    <span className="text-[11px] text-slate-500 line-clamp-1">
-                      {currentExpedition.name}
+          {/* Map Canvas Visual */}
+          <div className="relative w-full h-48 rounded-xl overflow-hidden polar-map-bg border border-blue-200/90 p-2.5 shadow-inner flex flex-col justify-between">
+            
+            {/* Radar Grid Circles */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+              <div className="w-48 h-48 rounded-full border border-sky-600" />
+              <div className="w-32 h-32 rounded-full border border-sky-600 absolute" />
+              <div className="w-16 h-16 rounded-full border border-sky-600 absolute" />
+            </div>
+
+            {/* Antarctic Outline SVG */}
+            <svg
+              className="absolute inset-0 w-full h-full object-contain opacity-40 pointer-events-none"
+              viewBox="0 0 400 400"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M200 60C260 60 330 110 350 170C370 230 330 310 270 340C210 370 130 360 80 300C30 240 50 160 90 110C130 60 170 60 200 60Z"
+                fill="#FFFFFF"
+                stroke="#93C5FD"
+                strokeWidth="2"
+              />
+              <path
+                d="M210 110 L205 180 L205 270"
+                stroke="#0B65D8"
+                strokeWidth="2.5"
+                strokeDasharray="4 4"
+              />
+            </svg>
+
+            {/* Legend Badges on Top Right */}
+            <div className="relative z-10 flex flex-col items-end gap-1 text-xs sm:text-[12px]">
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/95 backdrop-blur shadow-xs text-slate-900 font-semibold border border-blue-200">
+                <span className="w-2 h-2 rounded-full bg-blue-600" />
+                <span>Bharati Station</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/95 backdrop-blur shadow-xs text-slate-900 font-semibold border border-emerald-200">
+                <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                <span>Field Camp Alpha</span>
+              </div>
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-white/95 backdrop-blur shadow-xs text-rose-800 font-bold border border-rose-200">
+                <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
+                <span>⚠ Survey Zone B</span>
+              </div>
+            </div>
+
+            {/* Waypoint Markers on Map */}
+            <div className="relative z-10 w-full flex justify-around items-center my-auto">
+              {/* 1. Bharati Station Point */}
+              <div className="flex items-center gap-1.5 bg-[#082D56] text-white px-2.5 py-0.5 rounded-full text-xs sm:text-[12px] font-bold shadow-md">
+                <span className="w-2 h-2 rounded-full bg-sky-300" />
+                <span>Bharati Station</span>
+              </div>
+
+              {/* 2. Field Camp Alpha Point */}
+              <div className="flex items-center gap-1.5 bg-emerald-700 text-white px-2.5 py-0.5 rounded-full text-xs sm:text-[12px] font-bold shadow-md">
+                <span className="w-2 h-2 rounded-full bg-emerald-200" />
+                <span>Field Camp Alpha</span>
+              </div>
+
+              {/* 3. Survey Zone B Warning Point */}
+              <div className="flex items-center gap-1.5 bg-rose-700 text-white px-2.5 py-0.5 rounded-full text-xs sm:text-[12px] font-bold shadow-md animate-bounce">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-300" />
+                <span>Survey Zone B</span>
+              </div>
+            </div>
+
+            {/* Bottom Inset: Coordinates */}
+            <div className="relative z-10 flex items-center justify-between text-xs sm:text-[12px] font-mono text-slate-800 font-medium bg-white/95 backdrop-blur px-2.5 py-0.5 rounded border border-slate-200/90">
+              <div className="flex items-center gap-1">
+                <Compass className="w-3.5 h-3.5 text-polar-blue" />
+                <span>70° 46&apos; S, 11° 44&apos; E</span>
+              </div>
+              <span className="font-bold text-[#082D56]">SIMULATED MAP</span>
+            </div>
+
+          </div>
+
+          {/* Integrated Safety Intelligence Alert */}
+          <div className="mt-2.5 p-3 rounded-xl bg-amber-50/90 border border-amber-200/90 text-xs">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                <div>
+                  <span className="font-bold text-amber-950 block text-xs sm:text-[13.5px]">
+                    SAFETY ALERT: Survey Zone B — High Risk
+                  </span>
+                  <p className="text-xs sm:text-[13px] text-amber-950 font-medium mt-0.5 leading-normal">
+                    Severe snowfall + high winds detected. 3 field personnel affected.
+                  </p>
+                  <p className="text-xs sm:text-[12.5px] font-semibold text-amber-950 mt-1">
+                    Recommended: Delay movement or use Alternate Route A.
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                to="/emergency"
+                className="px-2.5 py-1 rounded-md bg-amber-700 hover:bg-amber-800 text-white text-xs font-semibold shrink-0 transition-colors shadow-xs"
+              >
+                View Alert
+              </Link>
+            </div>
+          </div>
+
+        </div>
+
+        {/* ================= RIGHT COLUMN: EMERGENCY & OPERATIONAL ALERTS ================= */}
+        <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col">
+          <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
+            <div className="flex items-center gap-1.5">
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
+              <h2 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#082D56]">
+                Emergency &amp; Operational Alerts
+              </h2>
+            </div>
+            <Link to="/emergency" className="text-xs sm:text-[13px] text-polar-blue font-semibold hover:underline flex items-center gap-1">
+              <span>View All</span>
+              <span className="text-[11px]">→</span>
+            </Link>
+          </div>
+
+          {/* Compact Alert Cards List with Prominent Typography */}
+          <div className="space-y-2">
+            {OPERATIONAL_ALERTS.map((alert) => {
+              const isCritical = alert.severity === 'Critical';
+              const isWarning = alert.severity === 'Warning';
+
+              return (
+                <Link
+                  key={alert.id}
+                  to="/emergency"
+                  className={`block p-2.5 rounded-xl border transition-all hover:shadow-xs ${
+                    isCritical
+                      ? 'bg-rose-50/70 border-rose-200 hover:border-rose-300'
+                      : isWarning
+                      ? 'bg-amber-50/50 border-amber-200 hover:border-amber-300'
+                      : 'bg-blue-50/40 border-blue-200 hover:border-blue-300'
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      {isCritical ? (
+                        <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+                      ) : isWarning ? (
+                        <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                      ) : (
+                        <Radio className="w-4 h-4 text-polar-blue shrink-0" />
+                      )}
+                      <span className="text-xs sm:text-[14.5px] font-bold text-slate-900 truncate">
+                        {alert.title} <span className="font-mono text-xs sm:text-[13px] text-slate-700 font-semibold">— {alert.code}</span>
+                      </span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded text-[11px] sm:text-xs font-bold uppercase shrink-0 ${
+                      isCritical
+                        ? 'bg-rose-100 text-rose-800'
+                        : isWarning
+                        ? 'bg-amber-100 text-amber-900'
+                        : 'bg-blue-100 text-blue-800'
+                    }`}>
+                      {alert.severity}
                     </span>
                   </div>
-                </div>
-                <Badge variant="success" dot size="sm">
-                  Active
-                </Badge>
-              </div>
 
-              <div className="flex items-center gap-1 text-[11px] text-slate-500 mb-3">
-                <MapPin className="w-3 h-3 text-polar-blue" />
-                <span>{currentExpedition.location}</span>
-              </div>
+                  <p className="text-xs sm:text-[13px] text-slate-700 line-clamp-2 mt-0.5 leading-normal font-normal">
+                    {alert.description}
+                  </p>
 
-              {/* Progress Bar */}
-              <div className="space-y-1 mb-3">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-500">Mission Progress</span>
-                  <span className="font-bold text-slate-800 font-mono">82%</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-polar-blue rounded-full w-[82%]" />
-                </div>
-              </div>
-
-              {/* 4 Mini Stat Pills */}
-              <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-slate-200/60 text-center">
-                <div className="p-1 rounded bg-white border border-slate-200/60">
-                  <span className="text-[9px] text-slate-400 block">Personnel</span>
-                  <span className="text-xs font-bold text-navy-DEFAULT font-mono">{currentExpedition.personnelCount}</span>
-                </div>
-                <div className="p-1 rounded bg-white border border-slate-200/60">
-                  <span className="text-[9px] text-slate-400 block">Cargo</span>
-                  <span className="text-xs font-bold text-navy-DEFAULT font-mono">{currentExpedition.cargoCount}</span>
-                </div>
-                <div className="p-1 rounded bg-white border border-slate-200/60">
-                  <span className="text-[9px] text-slate-400 block">Assets</span>
-                  <span className="text-xs font-bold text-navy-DEFAULT font-mono">{currentExpedition.assetCount}</span>
-                </div>
-                <div className="p-1 rounded bg-white border border-slate-200/60">
-                  <span className="text-[9px] text-slate-400 block">Inventory</span>
-                  <span className="text-xs font-bold text-navy-DEFAULT font-mono">12</span>
-                </div>
-              </div>
-
-            </div>
+                  <div className="flex items-center justify-between text-xs sm:text-[12.5px] text-slate-600 font-mono font-medium mt-1.5 pt-1 border-t border-slate-200/60">
+                    <span>{alert.location}</span>
+                    <span>{alert.timestamp}</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Upcoming Expeditions List */}
-          <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
+          <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-mono">
+            <span>Protocol: <strong className="text-slate-800 font-bold">Standard 4.2</strong></span>
+            <span className="text-slate-500 font-medium">Auto-monitoring</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* ========================================================================= */}
+      {/* 4. LOWER SECTION: COMPACT BALANCED 4-COLUMN GRID                           */}
+      {/* ========================================================================= */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        
+        {/* A. UPCOMING EXPEDITIONS */}
+        <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
+              <h3 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#082D56]">
                 Upcoming Expeditions
               </h3>
-              <span className="text-[11px] text-polar-blue font-semibold hover:underline cursor-pointer">
+              <Link to="/expeditions" className="text-xs sm:text-[13px] text-polar-blue font-semibold hover:underline">
                 View All →
-              </span>
+              </Link>
             </div>
 
             <div className="space-y-2">
@@ -257,236 +451,55 @@ export const CommandCenterPage: React.FC = () => {
                   key={exp.id}
                   className="p-2.5 rounded-xl bg-slate-50/80 hover:bg-slate-100/80 border border-slate-200/70 transition-all flex items-center justify-between gap-2"
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-7 h-7 rounded-lg bg-blue-100 text-polar-blue flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="w-6 h-6 rounded-lg bg-blue-100 text-polar-blue flex items-center justify-center shrink-0">
                       <Mountain className="w-3.5 h-3.5" />
                     </div>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-xs font-bold text-slate-800 truncate">
-                          {exp.code}
-                        </span>
+                      <div className="text-xs sm:text-[13.5px] font-bold text-slate-900 truncate">
+                        {exp.code}
                       </div>
-                      <p className="text-[10px] text-slate-500 truncate">
+                      <p className="text-xs sm:text-[13px] text-slate-700 font-medium truncate">
                         {exp.name}
                       </p>
-                      <p className="text-[9px] text-slate-400 font-mono mt-0.5">
-                        {exp.durationFormatted.split('–')[0]} • {exp.stationName}
+                      <p className="text-xs sm:text-[12px] text-slate-600 font-mono font-medium mt-0.5">
+                        {exp.stationName}
                       </p>
                     </div>
                   </div>
 
-                  <Badge 
-                    variant={exp.status === 'Planning' ? 'warning' : exp.status === 'Scheduled' ? 'primary' : 'neutral'}
-                    size="sm"
-                  >
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-bold shrink-0 ${
+                    exp.status === 'Planning'
+                      ? 'bg-amber-50 text-amber-800 border border-amber-300'
+                      : exp.status === 'Scheduled'
+                      ? 'bg-blue-50 text-blue-800 border border-blue-300'
+                      : 'bg-slate-100 text-slate-800 border border-slate-300'
+                  }`}>
                     {exp.status}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
+          <div className="pt-2 text-xs text-slate-700 font-mono border-t border-slate-100 mt-2">
+            Next departure: <strong className="text-slate-900 font-bold">01 Nov 2026</strong>
+          </div>
         </div>
 
-        {/* CENTER COLUMN: Expedition Overview Map & Route Visualization (4 cols) */}
-        <div className="lg:col-span-4 bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col justify-between">
-          
+        {/* B. RECENT FIELD ACTIVITY */}
+        <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
-                  Expedition Overview Map
-                </h3>
-                <span className="text-[10px] text-slate-400 font-mono">
-                  Schematic / Demo Route — Not real-time GPS
-                </span>
-              </div>
-              <span className="text-[11px] text-polar-blue font-semibold hover:underline cursor-pointer">
-                View Details →
-              </span>
-            </div>
-
-            {/* Map Canvas Visual (Polar Schematic SVG) */}
-            <div className="relative w-full h-80 rounded-xl overflow-hidden polar-map-bg border border-blue-200/80 p-3 shadow-inner flex flex-col justify-between">
-              
-              {/* Radar Grid Circles */}
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                <div className="w-64 h-64 rounded-full border border-sky-600" />
-                <div className="w-44 h-44 rounded-full border border-sky-600 absolute" />
-                <div className="w-24 h-24 rounded-full border border-sky-600 absolute" />
-              </div>
-
-              {/* Antarctic Outline SVG representation */}
-              <svg
-                className="absolute inset-0 w-full h-full object-contain opacity-40 pointer-events-none"
-                viewBox="0 0 400 400"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M200 60C260 60 330 110 350 170C370 230 330 310 270 340C210 370 130 360 80 300C30 240 50 160 90 110C130 60 170 60 200 60Z"
-                  fill="#FFFFFF"
-                  stroke="#93C5FD"
-                  strokeWidth="2"
-                />
-                {/* Traverse Route connecting line */}
-                <path
-                  d="M210 110 L205 180 L205 270"
-                  stroke="#0B65D8"
-                  strokeWidth="2.5"
-                  strokeDasharray="4 4"
-                />
-              </svg>
-
-              {/* Legend Badges on Top Right */}
-              <div className="relative z-10 flex flex-col items-end gap-1 text-[10px]">
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/90 backdrop-blur shadow-xs text-slate-700 font-medium border border-blue-100">
-                  <span className="w-2 h-2 rounded-full bg-blue-600" />
-                  <span>Bharati Station</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/90 backdrop-blur shadow-xs text-slate-700 font-medium border border-emerald-100">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>Field Camp Alpha</span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/90 backdrop-blur shadow-xs text-slate-700 font-medium border border-rose-100">
-                  <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-                  <span className="text-rose-700 font-bold">⚠ Survey Zone B</span>
-                </div>
-              </div>
-
-              {/* Waypoint Markers on Map */}
-              <div className="relative z-10 w-full h-full flex flex-col justify-around items-center -mt-6">
-                
-                {/* 1. Bharati Station Point */}
-                <div className="flex items-center gap-1.5 bg-navy-DEFAULT text-white px-2 py-0.5 rounded-full text-[10px] font-bold shadow-md transform -translate-x-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-sky-300" />
-                  <span>Bharati Station</span>
-                </div>
-
-                {/* 2. Field Camp Alpha Point */}
-                <div className="flex items-center gap-1.5 bg-emerald-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold shadow-md transform translate-x-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-200" />
-                  <span>Field Camp Alpha</span>
-                </div>
-
-                {/* 3. Survey Zone B Warning Point */}
-                <div className="flex items-center gap-1.5 bg-rose-600 text-white px-2.5 py-0.5 rounded-full text-[10px] font-bold shadow-md animate-bounce">
-                  <AlertTriangle className="w-3 h-3 text-amber-300" />
-                  <span>Survey Zone B</span>
-                </div>
-
-              </div>
-
-              {/* Bottom Inset: Compass & Coordinates */}
-              <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-slate-600 bg-white/80 backdrop-blur px-2.5 py-1 rounded-lg border border-slate-200/80">
-                <div className="flex items-center gap-1">
-                  <Compass className="w-3.5 h-3.5 text-polar-blue" />
-                  <span>70° 46&apos; S, 11° 44&apos; E</span>
-                </div>
-                <span className="font-semibold text-navy-DEFAULT">Bharati Sector</span>
-              </div>
-
-            </div>
-          </div>
-
-          {/* Safety Alert Action Banner right under map */}
-          <div className="mt-3 p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs">
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <div>
-                <span className="font-bold text-amber-900 block">
-                  Safety Alert: Survey Zone B — High Risk
-                </span>
-                <p className="text-[11px] text-amber-800 mt-0.5">
-                  Severe snowfall + high winds detected. 3 field personnel potentially affected.
-                </p>
-                <p className="text-[11px] font-semibold text-amber-950 mt-1">
-                  Recommended: Delay movement or use Alternate Route A.
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        {/* RIGHT COLUMN: Emergency Alerts & Field Activity (4 cols) */}
-        <div className="lg:col-span-4 space-y-4">
-          
-          {/* Emergency & Operational Alerts */}
-          <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
-                Emergency &amp; Operational Alerts
-              </h3>
-              <span className="text-[11px] text-polar-blue font-semibold hover:underline cursor-pointer">
-                View All →
-              </span>
-            </div>
-
-            <div className="space-y-2">
-              {OPERATIONAL_ALERTS.map((alert) => {
-                const isCritical = alert.severity === 'Critical';
-                const isWarning = alert.severity === 'Warning';
-
-                return (
-                  <div
-                    key={alert.id}
-                    className={`p-2.5 rounded-xl border transition-all ${
-                      isCritical
-                        ? 'bg-rose-50/70 border-rose-200'
-                        : isWarning
-                        ? 'bg-amber-50/50 border-amber-200'
-                        : 'bg-blue-50/40 border-blue-200'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <div className="flex items-center gap-1.5">
-                        {isCritical ? (
-                          <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                        ) : isWarning ? (
-                          <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                        ) : (
-                          <Radio className="w-3.5 h-3.5 text-polar-blue shrink-0" />
-                        )}
-                        <span className="text-xs font-bold text-slate-800">
-                          {alert.title} <span className="font-mono text-[10px] text-slate-500">— {alert.code}</span>
-                        </span>
-                      </div>
-                      <Badge 
-                        variant={isCritical ? 'emergency' : isWarning ? 'warning' : 'primary'} 
-                        size="sm"
-                      >
-                        {alert.severity}
-                      </Badge>
-                    </div>
-
-                    <p className="text-[11px] text-slate-600 line-clamp-2 mt-0.5">
-                      {alert.description}
-                    </p>
-
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono mt-1.5 pt-1 border-t border-slate-200/50">
-                      <span>{alert.location}</span>
-                      <span>{alert.timestamp}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Recent Field Activity */}
-          <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
+            <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
+              <h3 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#082D56]">
                 Recent Field Activity
               </h3>
-              <span className="text-[11px] text-polar-blue font-semibold hover:underline cursor-pointer">
+              <Link to="/field-operations" className="text-xs sm:text-[13px] text-polar-blue font-semibold hover:underline">
                 View All →
-              </span>
+              </Link>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {RECENT_FIELD_ACTIVITIES.map((act) => (
                 <div
                   key={act.id}
@@ -495,146 +508,84 @@ export const CommandCenterPage: React.FC = () => {
                   <div className="flex items-center gap-2 min-w-0">
                     <div className="w-2 h-2 rounded-full bg-polar-blue shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-[11px] font-semibold text-slate-800 truncate">
+                      <p className="text-xs sm:text-[13.5px] font-semibold text-slate-900 truncate">
                         {act.title}
                       </p>
-                      <p className="text-[9px] text-slate-400 font-mono truncate">
+                      <p className="text-xs sm:text-[12px] text-slate-600 font-mono font-medium truncate">
                         {act.location} • {act.timestamp}
                       </p>
                     </div>
                   </div>
 
-                  <Badge 
-                    variant={act.status === 'Synced' ? 'success' : 'warning'} 
-                    size="sm"
-                  >
+                  <span className={`px-2 py-0.5 rounded text-[11px] font-bold shrink-0 ${
+                    act.status === 'Synced'
+                      ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                      : 'bg-amber-50 text-amber-800 border border-amber-300'
+                  }`}>
                     {act.status}
-                  </Badge>
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-        </div>
-
-      </div>
-
-      {/* 4. BOTTOM OPERATIONAL STATUS ROW */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-        
-        {/* Live Expedition Progress Stepper (6 cols) */}
-        <div className="lg:col-span-6 bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
-                Live Expedition Progress
-              </span>
-              <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
-                IAE-2026-W03 • Bharati Station
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-5 gap-2 text-center pt-2">
-            
-            {/* Step 1 */}
-            <div className="flex flex-col items-center">
-              <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold mb-1 shadow-sm">
-                ✓
-              </div>
-              <span className="text-[11px] font-bold text-slate-800">Planning</span>
-              <span className="text-[9px] text-emerald-600 font-medium">Completed</span>
-              <span className="text-[8px] text-slate-400 font-mono">12 Aug</span>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex flex-col items-center">
-              <div className="w-6 h-6 rounded-full bg-polar-blue text-white flex items-center justify-center text-[10px] font-bold mb-1 shadow-sm">
-                ✓
-              </div>
-              <span className="text-[11px] font-bold text-slate-800">Logistics</span>
-              <span className="text-[9px] text-polar-blue font-medium">In Progress</span>
-              <span className="text-[8px] text-slate-400 font-mono">16 Aug</span>
-            </div>
-
-            {/* Step 3 */}
-            <div className="flex flex-col items-center">
-              <div className="w-6 h-6 rounded-full bg-polar-blue text-white flex items-center justify-center text-[10px] font-bold mb-1 shadow-sm">
-                ✓
-              </div>
-              <span className="text-[11px] font-bold text-slate-800">Deployment</span>
-              <span className="text-[9px] text-polar-blue font-medium">In Progress</span>
-              <span className="text-[8px] text-slate-400 font-mono">20 Aug</span>
-            </div>
-
-            {/* Step 4 */}
-            <div className="flex flex-col items-center opacity-60">
-              <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold mb-1">
-                4
-              </div>
-              <span className="text-[11px] font-semibold text-slate-700">Field Ops</span>
-              <span className="text-[9px] text-slate-400 font-medium">Upcoming</span>
-            </div>
-
-            {/* Step 5 */}
-            <div className="flex flex-col items-center opacity-60">
-              <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold mb-1">
-                5
-              </div>
-              <span className="text-[11px] font-semibold text-slate-700">Completion</span>
-              <span className="text-[9px] text-slate-400 font-medium">Upcoming</span>
-            </div>
-
+          <div className="pt-2 text-xs text-slate-700 font-mono border-t border-slate-100 mt-2">
+            Auto-refresh: <strong className="text-slate-900 font-bold">Every 60s</strong>
           </div>
         </div>
 
-        {/* Synchronization Status Ring Widget (3 cols) */}
-        <div className="lg:col-span-3 bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-navy-DEFAULT">
-              Synchronization Status
-            </span>
-            <span className="text-[11px] text-polar-blue font-semibold hover:underline cursor-pointer">
-              View Details →
-            </span>
-          </div>
+        {/* C. SYNCHRONIZATION STATUS */}
+        <div className="bg-white rounded-2xl border border-polar-border p-4 shadow-subtle flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
+              <h3 className="text-xs sm:text-[13px] font-bold uppercase tracking-wider text-[#082D56]">
+                Sync Status
+              </h3>
+              <Link to="/synchronization" className="text-xs sm:text-[13px] text-polar-blue font-semibold hover:underline">
+                View All →
+              </Link>
+            </div>
 
-          <div className="flex items-center gap-4 py-1">
-            {/* 100% Circle Gauge */}
-            <div className="relative w-16 h-16 rounded-full border-4 border-emerald-500 flex items-center justify-center shrink-0 shadow-sm bg-emerald-50/30">
-              <div className="text-center">
-                <span className="text-xs font-extrabold text-navy-DEFAULT font-mono block leading-none">100%</span>
-                <span className="text-[8px] text-emerald-700 font-bold uppercase">Synced</span>
+            <div className="flex items-center gap-3.5 py-1">
+              {/* 100% Circle Gauge */}
+              <div className="relative w-14 h-14 rounded-full border-4 border-emerald-500 flex items-center justify-center shrink-0 shadow-xs bg-emerald-50/40">
+                <div className="text-center">
+                  <span className="text-sm sm:text-base font-extrabold text-[#082D56] font-mono block leading-none">100%</span>
+                  <span className="text-[10px] text-emerald-800 font-bold uppercase">Synced</span>
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="text-xs sm:text-[12.5px] space-y-1 text-slate-700 font-mono font-medium">
+                <div>Last Sync: <strong className="text-slate-900">09:42 UTC</strong></div>
+                <div>Pending: <strong className="text-slate-900">0 records</strong></div>
+                <div>Offline Units: <strong className="text-amber-800 font-bold">1</strong></div>
               </div>
             </div>
+          </div>
 
-            {/* Stats */}
-            <div className="text-[10px] space-y-1 text-slate-500 font-mono">
-              <div>Last Sync: <strong className="text-slate-800">09:42 UTC</strong></div>
-              <div>Pending Changes: <strong className="text-slate-800">0</strong></div>
-              <div>Offline Devices: <strong className="text-amber-600">1</strong></div>
-              <div>Total Updates Today: <strong className="text-slate-800">12</strong></div>
-            </div>
+          <div className="pt-2 text-xs text-slate-700 font-mono border-t border-slate-100 mt-2">
+            Mesh Relay: <strong className="text-emerald-800 font-bold">ACTIVE</strong>
           </div>
         </div>
 
-        {/* Institutional Mission Motto Card (3 cols) */}
-        <div className="lg:col-span-3 bg-gradient-to-br from-navy-DEFAULT to-navy-900 text-white rounded-2xl border border-navy-700 p-4 shadow-subtle flex flex-col justify-between">
+        {/* D. INSTITUTIONAL MISSION & MOTTO CARD */}
+        <div className="bg-gradient-to-br from-[#082D56] to-[#041B35] text-white rounded-2xl border border-navy-700 p-4 shadow-subtle flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-polar-blue to-cyan-300 p-0.5 flex items-center justify-center">
-                <Mountain className="w-3.5 h-3.5 text-navy-DEFAULT" />
-              </div>
-              <span className="font-heading font-bold text-xs text-white">ExpediX</span>
+              <ExpediXLogo variant="mark" theme="dark" size={20} />
+              <span className="font-heading font-bold text-sm text-white">
+                Expedi<span className="text-sky-300">X</span>
+              </span>
             </div>
-            <p className="text-xs italic text-sky-200/90 leading-relaxed font-serif">
+            <p className="text-xs sm:text-[13px] italic text-sky-100 leading-relaxed font-serif">
               &ldquo;Exploration today, knowledge for tomorrow.&rdquo;
             </p>
           </div>
 
-          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-sky-300/70 font-mono">
+          <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-sky-200 font-mono font-medium">
             <span>Bharati Station • Antarctica</span>
-            <span>Simulation</span>
+            <span className="text-sky-300 font-bold">IAE-2026-W03</span>
           </div>
         </div>
 
@@ -643,3 +594,5 @@ export const CommandCenterPage: React.FC = () => {
     </div>
   );
 };
+
+

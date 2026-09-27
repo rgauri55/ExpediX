@@ -1,0 +1,35 @@
+<svg width="120" height="120" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- North Cardinal Pointer -->
+  <polygon points="50,5 42.5,17 57.5,17" fill="#082D56" />
+  <!-- South Cardinal Pointer -->
+  <polygon points="50,95 42.5,83 57.5,83" fill="#082D56" />
+  <!-- East Cardinal Pointer -->
+  <polygon points="95,50 83,42.5 83,57.5" fill="#082D56" />
+  <!-- West Cardinal Pointer -->
+  <polygon points="5,50 17,42.5 17,57.5" fill="#082D56" />
+
+  <!-- Four Quadrant Compass Ring Arcs -->
+  <path d="M 59 17.5 A 33 33 0 0 1 82.5 41" stroke="#082D56" stroke-width="3.2" stroke-linecap="round" />
+  <path d="M 82.5 59 A 33 33 0 0 1 59 82.5" stroke="#082D56" stroke-width="3.2" stroke-linecap="round" />
+  <path d="M 41 82.5 A 33 33 0 0 1 17.5 59" stroke="#082D56" stroke-width="3.2" stroke-linecap="round" />
+  <path d="M 17.5 41 A 33 33 0 0 1 41 17.5" stroke="#082D56" stroke-width="3.2" stroke-linecap="round" />
+
+  <!-- Upper-Left Navy Wing -->
+  <polygon points="27,27 44,27 57,45 44,52 27,27" fill="#082D56" />
+
+  <!-- Lower-Left Navy Base Slice -->
+  <polygon points="28,73 40,73 48,63 41,56 28,73" fill="#082D56" />
+
+  <!-- Lower-Right Blue Wing -->
+  <polygon points="46,55 58,45 74,73 57,73 46,55" fill="#0B65D8" />
+
+  <!-- Upper-Right Dynamic Blue Wing / Wedge -->
+  <polygon points="52,43 73,27 75,34 59,51" fill="#0B65D8" />
+
+  <!-- Expedition Route Swoop crossing the X -->
+  <path d="M 27 73 Q 48 55 78 24" stroke="#38BDF8" stroke-width="3" stroke-linecap="round" fill="none" />
+
+  <!-- Waypoint Navigation Dot at end of route -->
+  <circle cx="78.5" cy="23.5" r="4.2" fill="#38BDF8" stroke="#082D56" stroke-width="1.8" />
+  <circle cx="78.5" cy="23.5" r="1.8" fill="#FFFFFF" />
+</svg>
